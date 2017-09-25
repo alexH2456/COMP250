@@ -1,8 +1,8 @@
-//package assignments2017.a1posted;
+package Assignment1;
 
 /*
- *   STUDENT NAME      :  
- *   STUDENT ID        :
+ *   STUDENT NAME      :  Alexander Harris
+ *   STUDENT ID        :  260688155
  *   
  *   If you have any issues that you wish the T.A.s to consider, then you
  *   should list them here.   If you discussed on the assignment in depth 
@@ -447,7 +447,7 @@ public class NaturalNumber  {
 	public String toString(){	
 		String s = new String(); 
 		for (Integer coef : coefficients)     //  Java enhanced for loop
-			s = coef.toString() + s ;        //   Append each successive coefficient.
+			s = coef.toString() + s;        //   Append each successive coefficient.
 		return "(" + s + ")_" + base;		
 	}
 	
