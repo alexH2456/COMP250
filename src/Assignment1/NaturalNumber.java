@@ -124,7 +124,7 @@ public class NaturalNumber  {
 	
 	//To perform a+b, call a.plus(b). The parameter second refers to the second operand in a+b, that is, b
 	
-	public NaturalNumber plus( NaturalNumber  second) throws Exception{
+	public NaturalNumber plus(NaturalNumber second) throws Exception{
 				
 		//  initialize the sum as an empty list of coefficients
 		
@@ -169,40 +169,26 @@ public class NaturalNumber  {
 		//   one more term with the carry.
 		
 		
-		boolean cout = false;
+		int carry = 0;
 		
 		for (int i = 0; i < firstClone.coefficients.size(); i++) {		//Both numbers are same size, iterate through each set of coefficients and add.
-			int added = firstClone.coefficients.get(i) + secondClone.coefficients.get(i);
+			int added = firstClone.coefficients.get(i) + secondClone.coefficients.get(i) + carry;
 			
-			if (cout) {													//Add carry from previous index.
-				added = added + 1;
-				cout = false;
-			}
 			if (added >= this.base) {									//Check if carry and subtract base then add to list.
-				cout  = true;
-				added = added - this.base;
-				sum.coefficients.add(added);
-			}
-			else if (cout) {									
-				if(added + 1 == this.base) {							//Case where carry produces another carry.
-					sum.coefficients.add(added);
-				}
-				else {
-					sum.coefficients.add(added + 1);					//Standard case with carry.
-					cout = false;
-				}
+				carry = 1;
+				added -= this.base;
 			}
 			else {														//No carry.
-				sum.coefficients.add(added);
-			}
-			if (i == firstClone.coefficients.size() - 1 && cout) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
-				sum.coefficients.add(1);
+				carry = 0;
 			}
 			
+			sum.coefficients.add(added);
+		}
+		if (carry == 1) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
+			sum.coefficients.add(carry);
+		}
 			
 		//  ---------  END SOLUTION (plus)  ----------
-		
-		}
 		
 		return sum;		
 	}
@@ -236,11 +222,11 @@ public class NaturalNumber  {
 	/*   The multiply method computes this.multiply(b) where 'this' is a.
 	 */
 	
-	public NaturalNumber times( NaturalNumber multiplicand) throws Exception{
+	public NaturalNumber times(NaturalNumber multiplicand) throws Exception{
 		
 		//  initialize product as an empty list of coefficients
 		
-		NaturalNumber product	= new NaturalNumber( this.base );
+		NaturalNumber product = new NaturalNumber( this.base );
 
 		if (this.base != multiplicand.base){
 			System.out.println("ERROR: bases must be the same in a multiplication");
@@ -251,14 +237,18 @@ public class NaturalNumber  {
 		
 		// --------------  BEGIN SOLUTION (multiply)  ------------------
 		
-		/*
-		 *           multiplicand
-		 *          x  multiplier  (this)
-		 *        ---------------
-		 *            
-		 *   Note we use a helper method.  See below.
-		 */
-
+		for(int i = 0; i < this.coefficients.size(); i++) {
+			NaturalNumber sum = multiplicand.timesSingleDigit(this.coefficients.get(i));	//Compute multiplicand * first coefficient in multiplier
+			for(int j = i; j > 0; j--) {
+				sum.coefficients.addFirst(0);												//Pad with 0's corresponding to place
+			}
+			product = product.plus(sum);
+		}
+		
+		while ((product.coefficients.size() > 1) & 					//Reused code from minus method to remove leading 0's
+				(product.coefficients.getLast().intValue() == 0)){
+			product.coefficients.removeLast();
+		}
 		
 		//  ---------------  END SOLUTION  (multiply) -------------------
 		
@@ -271,7 +261,31 @@ public class NaturalNumber  {
 	/*
 	 *    'this' (the caller) will be the multiplicand.   
 	 */
-	
+	public NaturalNumber timesSingleDigit(int multiplier) {
+		
+		NaturalNumber multiplicand = this.clone();
+		NaturalNumber sum = new NaturalNumber(this.base);
+		
+		int carry = 0;
+
+		for (int i = 0; i < multiplicand.coefficients.size(); i++) {
+			int added = (multiplicand.coefficients.get(i) * multiplier) + carry;
+
+			if (added >= this.base) {			//Check and compute carry and subtract from sum.					
+				carry = added / this.base;
+				added -= carry * this.base;
+			}
+			else {
+				carry = 0;
+			}
+			
+			sum.coefficients.add(added);
+		}
+		if (carry != 0) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
+			sum.coefficients.add(carry);
+		}
+		return sum;
+	}
 	
 	//   END SOLUTION ----------  *helper method* for multiply ---------
 	
@@ -282,7 +296,7 @@ public class NaturalNumber  {
 	 *	
 	 */
 	
-	public NaturalNumber  minus(NaturalNumber second) throws Exception{
+	public NaturalNumber minus(NaturalNumber second) throws Exception{
 
 		//  initialize the result (difference) as an empty list of coefficients
 		
@@ -292,6 +306,7 @@ public class NaturalNumber  {
 			System.out.println("ERROR: bases must be the same in a subtraction");
 			throw new Exception();
 		}
+		
 		/*
 		 *    The minus method is not supposed to change the numbers. 
 		 *    But the grade school algorithm sometimes requires us to "borrow"
@@ -307,13 +322,39 @@ public class NaturalNumber  {
 			System.out.println("Error: the subtraction a-b requires that a > b");
 			throw new Exception();
 		}
-
-		//   ADD YOUR CODE HERE
 		
 		//  ---------  BEGIN SOLUTION (minus)  ----------
 		
+		int sizeFirst = first.coefficients.size();
+		int sizeSecond = second.coefficients.size();
 		
-
+		while(sizeFirst > sizeSecond) {					//Append leading 0s to smaller number until both are same size.
+			second.coefficients.add(0);
+			sizeSecond = second.coefficients.size();
+		}
+		
+		boolean carry = false;
+		
+		for(int i = 0; i < sizeFirst; i++) {
+			int firstNumber = first.coefficients.get(i);
+			int secondNumber = second.coefficients.get(i);
+			
+			if(firstNumber < secondNumber && !carry) {
+				difference.coefficients.add(firstNumber + this.base - secondNumber);
+				carry = true;
+			}
+			else if(firstNumber < secondNumber && carry) {
+				difference.coefficients.add(firstNumber + this.base - secondNumber - 1);
+			}
+			else if(carry) {
+				difference.coefficients.add(firstNumber - secondNumber - 1);
+				carry = false;
+			}
+			else {
+				difference.coefficients.add(firstNumber - secondNumber);
+			}
+		}
+		
 		//  ---------  END SOLUTION (minus)  ----------
 
 		

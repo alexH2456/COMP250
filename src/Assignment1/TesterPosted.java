@@ -10,12 +10,12 @@ public class TesterPosted {
 		
 		//  Here is an example.  
 		
-		String s1 = "42345614234561000343453440000343453440";
-		String s2 = "22320000423456100034345344000042";
+		//String s1 = "42345614234561000343453440000343453440";
+		//String s2 = "22320000423456100034345344000042";
 
-		int base = 7;
-		//String s1 = "1111";
-		//String s2 = "1111";
+		int base = 9;
+		String s1 = "777";
+		String s2 = "88";
 		
 		BigInteger big1 = new BigInteger(s1,base);
 		BigInteger big2 = new BigInteger(s2,base);
@@ -43,7 +43,7 @@ public class TesterPosted {
 		System.out.print("diff: big1-big2 =       (");
 		System.out.println(big1.subtract(big2).toString(base)  + ")_" + base );  // BigInteger
 		System.out.print("diff: n1-n2     =       ");
-		//System.out.println(n1.minus(n2));                         // NaturalNumber
+		System.out.println(n1.minus(n2));                         // NaturalNumber
 
 		//  The BigInteger class uses a 'multiply' method for addition. NaturalNumber 
 		//  uses 'times' instead.  
@@ -54,7 +54,7 @@ public class TesterPosted {
 		System.out.println( ")_" + base);
 		
 		System.out.print("multiply: n1*n2       = ");               // NaturalNumber
-		//System.out.println(n1.times(n2));
+		System.out.println(n1.times(n2));
 		System.out.println();
 		
 		System.out.print("slow multiply: n1*n2  = ");               // NaturalNumber
