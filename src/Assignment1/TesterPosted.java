@@ -10,12 +10,12 @@ public class TesterPosted {
 		
 		//  Here is an example.  
 		
-		//String s1 = "42345614234561000343453440000343453440";
-		//String s2 = "22320000423456100034345344000042";
+		String s1 = "42345614234561000343453440000343453440";
+		String s2 = "22320000423456100034345344000042";
 
-		int base = 8;
-		String s1 = "52600";
-		String s2 = "375";
+		int base = 7;
+		//String s1 = "1111";
+		//String s2 = "1111";
 		
 		BigInteger big1 = new BigInteger(s1,base);
 		BigInteger big2 = new BigInteger(s2,base);
@@ -33,7 +33,7 @@ public class TesterPosted {
 		System.out.print("sum: big1+big2 =        (");
 		System.out.println(big1.add(big2).toString(base) + ")_" + base );  // BigInteger
 		System.out.print("sum: n1+n2     =        ");
-		//System.out.println(n1.plus(n2));                     // NaturalNumber
+		System.out.println(n1.plus(n2));                     // NaturalNumber
 		System.out.println();
 		
 		//  The BigInteger class uses a 'subtract' method for addition, but NaturalNumber 

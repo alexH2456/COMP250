@@ -128,7 +128,7 @@ public class NaturalNumber  {
 				
 		//  initialize the sum as an empty list of coefficients
 		
-		NaturalNumber sum = new NaturalNumber( this.base );
+		NaturalNumber sum = new NaturalNumber(this.base);
 
 		if (this.base != second.base){
 			System.out.println("ERROR: bases must be the same in an addition");
@@ -168,7 +168,41 @@ public class NaturalNumber  {
 		//   term by term.    If the last coefficient yields a carry, then we add 
 		//   one more term with the carry.
 		
+		
+		boolean cout = false;
+		
+		for (int i = 0; i < firstClone.coefficients.size(); i++) {		//Both numbers are same size, iterate through each set of coefficients and add.
+			int added = firstClone.coefficients.get(i) + secondClone.coefficients.get(i);
+			
+			if (cout) {													//Add carry from previous index.
+				added = added + 1;
+				cout = false;
+			}
+			if (added >= this.base) {									//Check if carry and subtract base then add to list.
+				cout  = true;
+				added = added - this.base;
+				sum.coefficients.add(added);
+			}
+			else if (cout) {									
+				if(added + 1 == this.base) {							//Case where carry produces another carry.
+					sum.coefficients.add(added);
+				}
+				else {
+					sum.coefficients.add(added + 1);					//Standard case with carry.
+					cout = false;
+				}
+			}
+			else {														//No carry.
+				sum.coefficients.add(added);
+			}
+			if (i == firstClone.coefficients.size() - 1 && cout) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
+				sum.coefficients.add(1);
+			}
+			
+			
 		//  ---------  END SOLUTION (plus)  ----------
+		
+		}
 		
 		return sum;		
 	}
