@@ -314,7 +314,7 @@ public class NaturalNumber  {
 		 *    with a copy (a clone) instead.
 		 */
 
-		NaturalNumber  first = this.clone();
+		NaturalNumber first = this.clone();
 
 		//   You may assume 'this' > second. 
 		 
@@ -325,33 +325,44 @@ public class NaturalNumber  {
 		
 		//  ---------  BEGIN SOLUTION (minus)  ----------
 		
+		NaturalNumber secondClone = second.clone();
+		
 		int sizeFirst = first.coefficients.size();
-		int sizeSecond = second.coefficients.size();
+		int sizeSecond = secondClone.coefficients.size();
 		
 		while(sizeFirst > sizeSecond) {					//Append leading 0s to smaller number until both are same size.
-			second.coefficients.add(0);
-			sizeSecond = second.coefficients.size();
+			secondClone.coefficients.add(0);
+			sizeSecond = secondClone.coefficients.size();
 		}
 		
 		boolean carry = false;
 		
 		for(int i = 0; i < sizeFirst; i++) {
 			int firstNumber = first.coefficients.get(i);
-			int secondNumber = second.coefficients.get(i);
+			int secondNumber = secondClone.coefficients.get(i);
 			
-			if(firstNumber < secondNumber && !carry) {
+			if(firstNumber < secondNumber && carry == false) {
 				difference.coefficients.add(firstNumber + this.base - secondNumber);
 				carry = true;
 			}
-			else if(firstNumber < secondNumber && carry) {
+			else if(firstNumber < secondNumber && carry == true) {
 				difference.coefficients.add(firstNumber + this.base - secondNumber - 1);
+				carry = true;
 			}
-			else if(carry) {
+			else if(firstNumber == secondNumber && carry == true) {
+				difference.coefficients.add(this.base - 1);
+				carry = true;
+			}
+			else if(firstNumber == secondNumber && carry == false) {
+				difference.coefficients.add(0);
+			}
+			else if(firstNumber > secondNumber && carry == true) {
 				difference.coefficients.add(firstNumber - secondNumber - 1);
 				carry = false;
 			}
-			else {
+			else if(firstNumber > secondNumber && carry == false){
 				difference.coefficients.add(firstNumber - secondNumber);
+				carry = false;
 			}
 		}
 		
@@ -390,8 +401,6 @@ public class NaturalNumber  {
 		}
 		return quotient;
 	}
-
-
 	
 	/*  
 	 *  The divide method divides 'this' by 'divisor' i.e. this.divide(divisor)
@@ -421,6 +430,36 @@ public class NaturalNumber  {
 		
 		//  --------------- BEGIN SOLUTION (divide) --------------------------
 		
+		int remSize = remainder.coefficients.size();
+		int divSize = divisor.coefficients.size();
+		NaturalNumber dividend = new NaturalNumber(this.base);
+		
+		if(remainder.compareTo(divisor) > -1) {
+			for(int i = remSize - 1; i >= 0; i--) {
+				
+				dividend.coefficients.addFirst(this.coefficients.get(i));
+				
+				if(dividend.compareTo(divisor) > -1) {
+					int counter = 0;
+					NaturalNumber sum = new NaturalNumber(0, this.base);
+					
+					while(sum.plus(divisor).compareTo(dividend) < 1) {
+						sum = sum.plus(divisor);
+						counter++;
+					}
+					
+					dividend = dividend.minus(sum);
+					quotient.coefficients.addFirst(counter);
+					
+				}
+				else if(i == 0) {
+					quotient.coefficients.addFirst(0);
+				}
+			}
+		}
+		else {
+			quotient.coefficients.addFirst(0);
+		}
 		
 		// -------------  END SOLUTION  (divide)  ---------------------
 
