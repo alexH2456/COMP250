@@ -32,7 +32,7 @@ public class NaturalNumber  {
 	 *  but '0354' is not.  
 	 * 
 	 */
-	
+
 	private int	base;       
 
 	private LinkedList<Integer>  coefficients;
@@ -40,9 +40,9 @@ public class NaturalNumber  {
 	//  Constructors
 
 	NaturalNumber(int base){
-		
+
 		//  If no string argument is given, then it constructs an empty list of coefficients.
-		
+
 		this.base = base;
 		coefficients = new LinkedList<Integer>();
 	}
@@ -68,7 +68,7 @@ public class NaturalNumber  {
 		 *    of symbol '1' is 49, etc.  So for example to get the numerical value of '2', we subtract 
 		 *    the character value of '0' (48) from the character value of '2' (50).	
 		 */
-			
+
 		int l = sBase.length();
 		for (int indx = 0; indx < l; indx++){  
 			i = sBase.charAt(indx);
@@ -80,7 +80,7 @@ public class NaturalNumber  {
 			}			
 		}
 	}
-	
+
 	/*
 	 *   Construct a NaturalNumber object for a number that has just one digit in [0, base).  
 	 *   
@@ -90,7 +90,7 @@ public class NaturalNumber  {
 	NaturalNumber(int i,  int base) throws Exception{
 		this.base = base;
 		coefficients = new LinkedList<Integer>();
-		
+
 		if ((i >= 0) && (i < base))
 			coefficients.addFirst( new Integer(i) );
 		else {
@@ -106,11 +106,11 @@ public class NaturalNumber  {
 	 *   https://docs.oracle.com/javase/tutorial/java/javaOO/thiskey.html
 	 *	
 	 */
-	
+
 	/* 
 	 *	Getter for both the private variables- Added by Navin/Ramchalam for testGrader
 	 */
-	
+
 	public int getBase()
 	{
 		return base;
@@ -119,15 +119,15 @@ public class NaturalNumber  {
 	{
 		return coefficients;
 	}
-	
-	
-	
+
+
+
 	//To perform a+b, call a.plus(b). The parameter second refers to the second operand in a+b, that is, b
-	
+
 	public NaturalNumber plus(NaturalNumber second) throws Exception{
-				
+
 		//  initialize the sum as an empty list of coefficients
-		
+
 		NaturalNumber sum = new NaturalNumber(this.base);
 
 		if (this.base != second.base){
@@ -147,10 +147,10 @@ public class NaturalNumber  {
 		 *   If the two numbers have a different polynomial order    
 		 *   then pad the smaller one with zero coefficients.
 		 */
-		
+
 		int   diff = firstClone.coefficients.size() - second.coefficients.size();
 		while (diff < 0){  // second is bigger
-                                                     		
+
 			firstClone.coefficients.addLast(0);			        
 			diff++;
 		}
@@ -160,20 +160,20 @@ public class NaturalNumber  {
 		}
 
 		//   ADD YOUR CODE HERE
-		
+
 		//  ---------  BEGIN SOLUTION (plus)  ----------
 		//
 
 		//   Note 'firstClone' and 'secondClone' have the same size.  We add the coefficients
 		//   term by term.    If the last coefficient yields a carry, then we add 
 		//   one more term with the carry.
-		
-		
+
+
 		int carry = 0;
-		
+
 		for (int i = 0; i < firstClone.coefficients.size(); i++) {		//Both numbers are same size, iterate through each set of coefficients and add.
 			int added = firstClone.coefficients.get(i) + secondClone.coefficients.get(i) + carry;
-			
+
 			if (added >= this.base) {									//Check if carry and subtract base then add to list.
 				carry = 1;
 				added -= this.base;
@@ -181,18 +181,18 @@ public class NaturalNumber  {
 			else {														//No carry.
 				carry = 0;
 			}
-			
+
 			sum.coefficients.add(added);
 		}
-		if (carry == 1) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
+		if (carry == 1) {												//Check if carry for last coefficient and appends the carry to the end of the list if true.
 			sum.coefficients.add(carry);
 		}
-			
+
 		//  ---------  END SOLUTION (plus)  ----------
-		
+
 		return sum;		
 	}
-	
+
 
 	/*   
 	 *    Slow multiplication algorithm, mentioned in lecture 1.
@@ -200,7 +200,7 @@ public class NaturalNumber  {
 	 *    
 	 *    'this' is the multiplicand i.e. a*b = a+a+a+...+a (b times) where a is multiplicand and b is multiplier
 	 */
-	
+
 	public NaturalNumber slowTimes( NaturalNumber  multiplier) throws Exception{
 
 		NaturalNumber prod  = new NaturalNumber(0, this.base);
@@ -210,7 +210,7 @@ public class NaturalNumber  {
 		}
 		return prod;
 	}
-	
+
 	/*
 	 *    The multiply method must NOT be the same as what you learned in grade school since 
 	 *    that method uses a temporary 2D table with space proportional to the square of 
@@ -221,92 +221,93 @@ public class NaturalNumber  {
 
 	/*   The multiply method computes this.multiply(b) where 'this' is a.
 	 */
-	
+
 	public NaturalNumber times(NaturalNumber multiplicand) throws Exception{
-		
+
 		//  initialize product as an empty list of coefficients
-		
+
 		NaturalNumber product = new NaturalNumber( this.base );
 
 		if (this.base != multiplicand.base){
 			System.out.println("ERROR: bases must be the same in a multiplication");
 			throw new Exception();
 		}
-		
+
 		//    ADD YOUR CODE HERE
-		
+
 		// --------------  BEGIN SOLUTION (multiply)  ------------------
-		
+
 		for(int i = 0; i < this.coefficients.size(); i++) {
+
 			NaturalNumber sum = multiplicand.timesSingleDigit(this.coefficients.get(i));	//Compute multiplicand * first coefficient in multiplier
+
 			for(int j = i; j > 0; j--) {
 				sum.coefficients.addFirst(0);												//Pad with 0's corresponding to place
 			}
+
 			product = product.plus(sum);
 		}
-		
-		while ((product.coefficients.size() > 1) & 					//Reused code from minus method to remove leading 0's
-				(product.coefficients.getLast().intValue() == 0)){
+
+		//  ---------------  END SOLUTION  (multiply) -------------------
+
+		while ((product.coefficients.size() > 1) & 											//Reused code from minus method to remove leading 0's. Happens if one of the numbers is zero.
+				(product.coefficients.getLast().intValue() == 0)){							//Not sure if this case will be tested so left it out of my solution.
 			product.coefficients.removeLast();
 		}
-		
-		//  ---------------  END SOLUTION  (multiply) -------------------
-		
+
 		return product;
 	}
 
 
 	// -------- BEGIN SOLUTION     *helper method* for multiply  -----
-	
-	/*
-	 *    'this' (the caller) will be the multiplicand.   
-	 */
+
 	public NaturalNumber timesSingleDigit(int multiplier) {
-		
+
 		NaturalNumber multiplicand = this.clone();
 		NaturalNumber sum = new NaturalNumber(this.base);
-		
+
 		int carry = 0;
 
-		for (int i = 0; i < multiplicand.coefficients.size(); i++) {
-			int added = (multiplicand.coefficients.get(i) * multiplier) + carry;
+		for (int i = 0; i < multiplicand.coefficients.size(); i++) {					//Iterate through digits of multiplicands.
 
-			if (added >= this.base) {			//Check and compute carry and subtract from sum.					
+			int added = (multiplicand.coefficients.get(i) * multiplier) + carry;		//Multiply current digit by multiplier and add carry.
+
+			if (added >= this.base) {													//Check and compute carry and subtract from sum.					
 				carry = added / this.base;
 				added -= carry * this.base;
 			}
 			else {
 				carry = 0;
 			}
-			
-			sum.coefficients.add(added);
+
+			sum.coefficients.add(added);												//Add result to sum.
 		}
-		if (carry != 0) {		//Check if carry for last coefficient and appends the carry to the end of the list if true.
+		if (carry != 0) {																//Check if carry for last coefficient and appends the carry to the end of the list if true.
 			sum.coefficients.add(carry);
 		}
 		return sum;
 	}
-	
+
 	//   END SOLUTION ----------  *helper method* for multiply ---------
-	
-	
+
+
 	/*
 	 *   The minus method computes this.minus(b) where 'this' is a, and a > b.
 	 *   If a < b, then it throws an exception.
 	 *	
 	 */
-	
+
 	public NaturalNumber minus(NaturalNumber second) throws Exception{
 
 		//  initialize the result (difference) as an empty list of coefficients
-		
+
 		NaturalNumber  difference = new NaturalNumber(this.base);
 
 		if (this.base != second.base){
 			System.out.println("ERROR: bases must be the same in a subtraction");
 			throw new Exception();
 		}
-		
+
 		/*
 		 *    The minus method is not supposed to change the numbers. 
 		 *    But the grade school algorithm sometimes requires us to "borrow"
@@ -317,58 +318,56 @@ public class NaturalNumber  {
 		NaturalNumber first = this.clone();
 
 		//   You may assume 'this' > second. 
-		 
+
 		if (this.compareTo(second) < 0){
 			System.out.println("Error: the subtraction a-b requires that a > b");
 			throw new Exception();
 		}
-		
+
 		//  ---------  BEGIN SOLUTION (minus)  ----------
-		
+
 		NaturalNumber secondClone = second.clone();
-		
+
 		int sizeFirst = first.coefficients.size();
 		int sizeSecond = secondClone.coefficients.size();
-		
-		while(sizeFirst > sizeSecond) {					//Append leading 0s to smaller number until both are same size.
+
+		while(sizeFirst > sizeSecond) {									//Append leading 0s to smaller number until both are same size.
 			secondClone.coefficients.add(0);
 			sizeSecond = secondClone.coefficients.size();
 		}
-		
-		boolean carry = false;
-		
-		for(int i = 0; i < sizeFirst; i++) {
+
+		boolean carry = false;											//Carry will always be 1 so use boolean to save time.
+
+		for(int i = 0; i < sizeFirst; i++) {							//First always > second.
+
 			int firstNumber = first.coefficients.get(i);
 			int secondNumber = secondClone.coefficients.get(i);
-			
-			if(firstNumber < secondNumber && carry == false) {
+
+			if(firstNumber < secondNumber && !carry) {										//When first < second, we will have a carry, add base to first and sub second. Set carry to true.
 				difference.coefficients.add(firstNumber + this.base - secondNumber);
 				carry = true;
 			}
-			else if(firstNumber < secondNumber && carry == true) {
+			else if(firstNumber < secondNumber && carry) {									//When first < second and we already have a carry.
 				difference.coefficients.add(firstNumber + this.base - secondNumber - 1);
-				carry = true;
 			}
-			else if(firstNumber == secondNumber && carry == true) {
+			else if(firstNumber == secondNumber && carry) {									//When first = second and we have carry, sub carry from base and add to result.
 				difference.coefficients.add(this.base - 1);
-				carry = true;
 			}
-			else if(firstNumber == secondNumber && carry == false) {
+			else if(firstNumber == secondNumber && !carry) {								//First = second and no carry.
 				difference.coefficients.add(0);
 			}
-			else if(firstNumber > secondNumber && carry == true) {
+			else if(firstNumber > secondNumber && carry) {									//First > second and carry, sub second and carry from first. Set carry to false.
 				difference.coefficients.add(firstNumber - secondNumber - 1);
 				carry = false;
 			}
-			else if(firstNumber > secondNumber && carry == false){
+			else {																			//First > second and no carry.
 				difference.coefficients.add(firstNumber - secondNumber);
-				carry = false;
 			}
 		}
-		
+
 		//  ---------  END SOLUTION (minus)  ----------
 
-		
+
 		/*  
 		 *  In the case of say  100-98, we will end up with 002.  
 		 *  Remove all the leading 0's of the result.
@@ -377,7 +376,7 @@ public class NaturalNumber  {
 		 *  to do this check, which would mess up grading since correct
 		 *  answers would appear incorrect.
 		 */
-		
+
 		while ((difference.coefficients.size() > 1) & 
 				(difference.coefficients.getLast().intValue() == 0)){
 			difference.coefficients.removeLast();
@@ -389,7 +388,7 @@ public class NaturalNumber  {
 	 *    Slow division algorithm, mentioned in lecture 1.
 	 */
 
-	
+
 	public NaturalNumber slowDivide( NaturalNumber  divisor) throws Exception{
 
 		NaturalNumber quotient = new NaturalNumber(0,base);
@@ -401,71 +400,73 @@ public class NaturalNumber  {
 		}
 		return quotient;
 	}
-	
+
 	/*  
 	 *  The divide method divides 'this' by 'divisor' i.e. this.divide(divisor)
 	 *   When this method terminates, there is a remainder but it is ignored (not returned).
 	 *   
 	 */
-	
+
 	public NaturalNumber divide( NaturalNumber  divisor ) throws Exception{
-		
+
 		//  initialize quotient as an empty list of coefficients
-		
+
 		NaturalNumber  quotient = new NaturalNumber(this.base);
-		
+
 		if (this.base != divisor.base){
 			System.out.println("ERROR: bases must be the same in an division");
 			throw new Exception();
 		}
-		
+
 		if(divisor.compareTo(new NaturalNumber(0, this.base))==0){
 			System.out.println("ERROR: division by zero not possible");
 			throw new Exception();
 		}
-		
-		NaturalNumber  remainder = this.clone();
 
-		//   ADD YOUR CODE HERE.
-		
+		NaturalNumber  divOg = this.clone();
+
 		//  --------------- BEGIN SOLUTION (divide) --------------------------
-		
-		int remSize = remainder.coefficients.size();
-		int divSize = divisor.coefficients.size();
+
+		int divOgSize = divOg.coefficients.size();
 		NaturalNumber dividend = new NaturalNumber(this.base);
-		
-		if(remainder.compareTo(divisor) > -1) {
-			for(int i = remSize - 1; i >= 0; i--) {
-				
+
+		if(divOg.compareTo(divisor) > -1) { 								//If original dividend >= divisor
+
+			for(int i = divOgSize - 1; i >= 0; i--) {			
+
 				dividend.coefficients.addFirst(this.coefficients.get(i));
-				
-				if(dividend.compareTo(divisor) > -1) {
+
+				if(dividend.compareTo(divisor) > -1) {						//When the dividend >= divisor, we can calculate the quotient.
+
 					int counter = 0;
 					NaturalNumber sum = new NaturalNumber(0, this.base);
-					
-					while(sum.plus(divisor).compareTo(dividend) < 1) {
+
+					while(sum.plus(divisor).compareTo(dividend) < 1) {		//Increments counter until we find number of times divisor fits into dividend.
 						sum = sum.plus(divisor);
 						counter++;
 					}
 					
-					dividend = dividend.minus(sum);
-					quotient.coefficients.addFirst(counter);
-					
+					dividend = dividend.minus(sum);							//Subtracts sum from dividend.
+					quotient.coefficients.addFirst(counter);				//Adds counter to quotient.
+				
 				}
-				else if(i == 0) {
+				else if(quotient.coefficients.size() != 0) {				//Add 0 if dividend is still smaller than divisor.
 					quotient.coefficients.addFirst(0);
+				}
+				if(dividend.coefficients.getLast() == 0) {					//Remove leading 0's from dividend.
+					dividend.coefficients.removeLast();
 				}
 			}
 		}
 		else {
-			quotient.coefficients.addFirst(0);
+			quotient.coefficients.addFirst(0);								//If dividend < divisor, quotient = 0.
 		}
-		
+
 		// -------------  END SOLUTION  (divide)  ---------------------
 
 		return quotient;		
 	}
-	
+
 	//   Helper methods
 
 	/*
@@ -475,7 +476,7 @@ public class NaturalNumber  {
 	 * then you need to clone the number and work with the cloned number 
 	 * instead of the original. 
 	 */
-	
+
 	@Override
 	public NaturalNumber  clone(){
 
@@ -488,7 +489,7 @@ public class NaturalNumber  {
 		}
 		return copy;
 	}
-	
+
 	/*
 	 *  The subtraction method (minus) computes a-b and requires that a>b.   
 	 *  The a.compareTo(b) method is useful for checking this condition. 
@@ -498,28 +499,28 @@ public class NaturalNumber  {
 	 *  The compareTo() method assumes that the two numbers have the same base.
 	 *  One could add code to check this but I didn't.
 	 */
-	
+
 	private int 	compareTo(NaturalNumber second){
 
 		//   if  this < other,  return -1  
 		//   if  this > other,  return  1  
 		//   otherwise they are equal and return 0
-		
+
 		//   Assume maximum degree coefficient is non-zero.   Then,  if two numbers
 		//   have different maximum degree, it is easy to decide which is larger.
-		
+
 		int diff = this.coefficients.size() - second.coefficients.size();
 		if (diff < 0)
 			return -1;
 		else if (diff > 0)
 			return 1;
 		else { 
-			
+
 			//   If two numbers have the same maximum degree,  then it is a bit trickier
 			//   to decide which number is larger.   You need to compare the coefficients,
 			//   starting from the largest and working toward the smallest until you find
 			//   coefficients that are not equal.
-			
+
 			boolean done = false;
 			int i = this.coefficients.size() - 1;
 			while (i >=0 && !done){
@@ -539,7 +540,7 @@ public class NaturalNumber  {
 
 	/*  computes  'this' * base^n  
 	 */
-	
+
 	private NaturalNumber timesBaseToThePower(int n){
 		for (int i=0; i< n; i++){
 			this.coefficients.addFirst(new Integer(0));
@@ -555,8 +556,8 @@ public class NaturalNumber  {
 	It does so simply by make a copy of the list with elements in 
 	reversed order, and then printing the list using the LinkedList's
 	toString() method.
-	*/
-	
+	 */
+
 	@Override
 	public String toString(){	
 		String s = new String(); 
@@ -564,6 +565,6 @@ public class NaturalNumber  {
 			s = coef.toString() + s;        //   Append each successive coefficient.
 		return "(" + s + ")_" + base;		
 	}
-	
+
 }
 
