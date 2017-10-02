@@ -10,7 +10,7 @@ package Assignment1;
  *   We insist that you each write your own code.   But we also expect 
  *   (and indeed encourage) that you discuss some of the technical
  *   issues and problems with each other, in case you get stuck.    
-
+ *
  *   
  */
 
@@ -250,7 +250,7 @@ public class NaturalNumber  {
 
 		//  ---------------  END SOLUTION  (multiply) -------------------
 
-		while ((product.coefficients.size() > 1) & 											//Reused code from minus method to remove leading 0's. Happens if one of the numbers is zero.
+		while ((product.coefficients.size() > 1) & 											//Reused code from minus method to remove leading 0's. Happens if one of the numbers in the multiplication is zero.
 				(product.coefficients.getLast().intValue() == 0)){							//Not sure if this case will be tested so left it out of my solution.
 			product.coefficients.removeLast();
 		}
@@ -436,7 +436,7 @@ public class NaturalNumber  {
 
 				dividend.coefficients.addFirst(this.coefficients.get(i));
 
-				if(dividend.compareTo(divisor) > -1) {						//When the dividend >= divisor, we can calculate the quotient.
+				if(dividend.compareTo(divisor) > -1) {						//If dividend >= divisor, we can calculate the quotient.
 
 					int counter = 0;
 					NaturalNumber sum = new NaturalNumber(0, this.base);

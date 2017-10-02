@@ -86,7 +86,7 @@ public class TesterPosted {
 			case 13:
 				base = 8;
 				s1 = "7212453415123434535343435312133453421001104045340";
-				s2 = "2";
+				s2 = "3";
 				break;
 			case 14:
 				base = 10;
