@@ -21,22 +21,21 @@ public class Expression  {
 	Expression(String expressionString) throws IllegalArgumentException{
 		tokenList = new ArrayList<String>();
 		StringBuilder token = new StringBuilder();
-		
+
 		//ADD YOUR CODE BELOW HERE
-		
+
 		String parsedToken;
-		
+
 		for(int i = 0; i < expressionString.length(); i++) {
-			
+
 			if(expressionString.charAt(i) == ' ') {		// Ignores spaces
 				continue;
 			}
-			
-			
-			 // Compares the last character in token to the character at i in the string.
-			 // If they are both integers, or both +/-, append it to the token.
-			 // If not, add the current token to tokenList and reset token, then append the new character.
-			
+
+			// Compares the last character in token to the character at i in the string.
+			// If they are both integers, or both +/-, append it to the token.
+			// If not, add the current token to tokenList and reset token, then append the new character.
+
 			if(token.length() > 0) {
 				if(expressionString.charAt(i) >= 48 && expressionString.charAt(i) <= 57) {
 					if(!(token.charAt(token.length() - 1) >= 48 && token.charAt(token.length() - 1) <= 57)) {
@@ -65,7 +64,7 @@ public class Expression  {
 		}
 		parsedToken = token.toString();							// Adds last token to tokenList
 		tokenList.add(parsedToken);
-		
+
 		//ADD YOUR CODE ABOVE HERE
 	}
 
@@ -78,13 +77,78 @@ public class Expression  {
 	public Integer eval(){
 		Stack<String> operatorStack = new Stack<String>();
 		Stack<Integer> valueStack = new Stack<Integer>();
-		
-		//ADD YOUR CODE BELOW HERE
-		//..
-		//..
-		//ADD YOUR CODE ABOVE HERE
 
-		return null;   // DELETE THIS LINE
+		//ADD YOUR CODE BELOW HERE
+
+		for(String token : tokenList) {
+
+			switch(token) {
+			
+			case "[":
+			case "(":
+				break;
+
+			case "]":
+			case "+":
+			case "-":
+			case "++":
+			case "--":
+			case "*":
+			case "/":
+				operatorStack.push(token);
+				break;
+				
+			case ")":
+
+				String operator = operatorStack.pop();
+				int temp;
+				int temp2;
+
+				switch(operator) {
+				case "+":
+					temp = valueStack.pop() + valueStack.pop();
+					valueStack.push(temp);
+					break;
+				case "-":
+					temp = valueStack.pop();
+					temp2 = valueStack.pop();
+					temp = temp2 - temp;
+					valueStack.push(temp);
+					break;
+				case "*":
+					temp = valueStack.pop() * valueStack.pop();
+					valueStack.push(temp);
+					break;
+				case "/":
+					temp = valueStack.pop();
+					temp2 = valueStack.pop();
+					temp = temp2 / temp;
+					valueStack.push(temp);
+					break;
+				case "++":
+					temp = valueStack.pop() + 1;
+					valueStack.push(temp);
+					break;
+				case "--":
+					temp = valueStack.pop() - 1;
+					valueStack.push(temp);
+					break;
+				case "]":
+					temp = Math.abs(valueStack.pop());
+					valueStack.push(temp);
+					break;
+				}
+				break;
+
+			default:
+				valueStack.push(Integer.parseInt(token));
+				break;
+			}	
+		}
+
+		return valueStack.pop();
+		
+		//ADD YOUR CODE ABOVE HERE
 	}
 
 	//Helper methods
