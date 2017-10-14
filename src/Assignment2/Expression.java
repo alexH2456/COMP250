@@ -1,7 +1,8 @@
 package Assignment2;
 
 /*
-
+	Student Name: Alexander Harris
+	Student ID:   260688155
  */
 
 import java.util.Stack;
@@ -20,10 +21,51 @@ public class Expression  {
 	Expression(String expressionString) throws IllegalArgumentException{
 		tokenList = new ArrayList<String>();
 		StringBuilder token = new StringBuilder();
-
+		
 		//ADD YOUR CODE BELOW HERE
-		//..
-		//..
+		
+		String parsedToken;
+		
+		for(int i = 0; i < expressionString.length(); i++) {
+			
+			if(expressionString.charAt(i) == ' ') {		// Ignores spaces
+				continue;
+			}
+			
+			
+			 // Compares the last character in token to the character at i in the string.
+			 // If they are both integers, or both +/-, append it to the token.
+			 // If not, add the current token to tokenList and reset token, then append the new character.
+			
+			if(token.length() > 0) {
+				if(expressionString.charAt(i) >= 48 && expressionString.charAt(i) <= 57) {
+					if(!(token.charAt(token.length() - 1) >= 48 && token.charAt(token.length() - 1) <= 57)) {
+						parsedToken = token.toString();
+						tokenList.add(parsedToken);
+						token.setLength(0);
+					}
+				}
+				else if(expressionString.charAt(i) == 43 || expressionString.charAt(i) == 45) {
+					if(!(token.charAt(token.length() - 1) == 45 || token.charAt(token.length() - 1) == 43)) {
+						parsedToken = token.toString();
+						tokenList.add(parsedToken);
+						token.setLength(0);
+					}
+				}
+				else {
+					parsedToken = token.toString();
+					tokenList.add(parsedToken);
+					token.setLength(0);
+				}
+				token.append(expressionString.charAt(i));
+			}
+			else {
+				token.append(expressionString.charAt(i));		// Adds first character in the string to an empty token
+			}
+		}
+		parsedToken = token.toString();							// Adds last token to tokenList
+		tokenList.add(parsedToken);
+		
 		//ADD YOUR CODE ABOVE HERE
 	}
 
