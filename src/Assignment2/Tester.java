@@ -69,8 +69,8 @@ public class Tester{
 				//compare the values
 				if (computedValue.equals(expectedValue)) {
 					passed++;
-					System.out.println(exp);
-					//System.out.println(exp + " = " + computedValue);
+					//System.out.println(exp);
+					System.out.println(exp + " = " + computedValue);
 				}
 				else{
 					System.out.println("Passed " + passed + " tests");
