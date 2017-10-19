@@ -32,9 +32,10 @@ public class Expression  {
 				continue;
 			}
 
-			// Compares the last character in token to the character at i in the string.
-			// If they are both integers, or both +/-, append it to the token.
-			// If not, add the current token to tokenList and reset token, then append the new character.
+			/* Compares the last character in token to the character at i in the string.
+			 * If they are both integers, or both +/-, append it to the token.
+			 * If not, add the current token to tokenList and reset token, then append the new character.
+			 */
 
 			if(token.length() > 0) {
 				if(expressionString.charAt(i) >= 48 && expressionString.charAt(i) <= 57) {
@@ -79,6 +80,13 @@ public class Expression  {
 		Stack<Integer> valueStack = new Stack<Integer>();
 
 		//ADD YOUR CODE BELOW HERE
+		
+		/* Evaluate each token in the list, push operators onto the operator stack and values onto the value stack.
+		 * When a ")" is reached, we pop an operator off the stack and evaluate based on what type it is.
+		 * The result is then pushed back onto the stack.
+		 * If we encounter a "]", we take the absolute value of the number on top of the value stack and push it back onto the stack.
+		 * Finally return whatever is left in the stack.
+		 */
 
 		for(String token : tokenList) {
 
@@ -88,7 +96,6 @@ public class Expression  {
 			case "(":
 				break;
 
-			case "]":
 			case "+":
 			case "-":
 			case "++":
@@ -133,13 +140,14 @@ public class Expression  {
 					temp = valueStack.pop() - 1;
 					valueStack.push(temp);
 					break;
-				case "]":
-					temp = Math.abs(valueStack.pop());
-					valueStack.push(temp);
-					break;
 				}
 				break;
 
+			case "]":
+				int abs = Math.abs(valueStack.pop());
+				valueStack.push(abs);
+				break;
+			
 			default:
 				valueStack.push(Integer.parseInt(token));
 				break;
