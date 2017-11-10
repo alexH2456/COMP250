@@ -18,7 +18,7 @@ public class TesterA3starter
 		{
 			File file = new File(filename);
 			Scanner scanner = new Scanner(file);
-			
+
 			/* Strip non-alphanumeric \\W  characters
 			 * That is,  remove any characters other than a to z,  A to Z, and 0 to 9
 			 * 
@@ -27,7 +27,7 @@ public class TesterA3starter
 			 * and lists the '+' symbols as meaning any non-zero number of repetitions  
 			 */
 			scanner.useDelimiter("\\W+");
-			
+
 			while (scanner.hasNext())
 			{
 				words.add(scanner.next());
@@ -45,22 +45,20 @@ public class TesterA3starter
 	{	   
 		ArrayList<String> list = new ArrayList<String>();
 
-/*    
- *    You can test your code with the input file below.
- *	  For example, if you wish to share your outputs on the discussion board 
- *    that you obtained using the given text file, that's fine. 
- *		
- *	  You will need to put a different pathname in here.
- */ 		
- 	//	String fileName = "C:\\Users\\Michael\\Dropbox\\Eclipse (Yoga)\\250\\src\\assignments2017\\a3\\bodybuilding.txt";
-    //	list = readWordsFromFile(fileName);
- 
- 	// String fileName = "//home//ramchalamkr//bodybuilding.txt";
-	// list = readWordsFromFile(fileName);
-
-    //    For debugging, we suggest you use a smaller set of words such as the ones shown in the PDF.      
+		/*    
+		 *    You can test your code with the input file below.
+		 *	  For example, if you wish to share your outputs on the discussion board 
+		 *    that you obtained using the given text file, that's fine. 
+		 *		
+		 *	  You will need to put a different pathname in here.
+		 */ 
 		
-		Collections.addAll(list, "a", "and", "ax", "dog", "door", "dot");
+//		String fileName = "C:\\\\Users\\\\zizou\\\\eclipse-workspace\\\\COMP250\\\\src\\\\Assignment3\\\\bodybuilding.txt";
+//		list = readWordsFromFile(fileName);
+
+		//    For debugging, we suggest you use a smaller set of words such as the ones shown in the PDF.      
+
+		Collections.addAll(list, "a", "and", "ax", "dog", "door", "dot", "don't", "cat");
 
 		WordTree   WordTree = new WordTree();
 		WordTree.loadWords(list);
@@ -73,30 +71,33 @@ public class TesterA3starter
 
 		System.out.println();
 		System.out.println("---  Test contains() method.   Correct answer shown in brackets. -----" );
-		System.out.println("WordTree contains 'door' = " + WordTree.contains("door") + " (true)" );
-		System.out.println("WordTree contains 'and' = " + WordTree.contains("and")   + " (true)");
-		System.out.println("WordTree contains 'cat' = " + WordTree.contains("cat")   + " (false)");
-		System.out.println("WordTree contains 'dog' = " + WordTree.contains("dog")   + " (true)");
-		System.out.println("WordTree contains 'ax' = " + WordTree.contains("ax")     + " (true)");
-		System.out.println("WordTree contains 'dot' = " + WordTree.contains("dot")   + " (true)");
-		System.out.println("WordTree contains 'a' = " + WordTree.contains("a")       + " (true)");
-		System.out.println("WordTree contains 'an' = " + WordTree.contains("an")     + " (false)");      
+		System.out.println("WordTree contains 'door' = " + WordTree.contains("door"));
+		System.out.println("WordTree contains 'and' = " + WordTree.contains("and"));
+		System.out.println("WordTree contains 'cat' = " + WordTree.contains("cat"));
+		System.out.println("WordTree contains 'dog' = " + WordTree.contains("dog"));
+		System.out.println("WordTree contains 'ax' = " + WordTree.contains("ax"));
+		System.out.println("WordTree contains 'dot' = " + WordTree.contains("dot"));
+		System.out.println("WordTree contains 'a' = " + WordTree.contains("a"));
+		System.out.println("WordTree contains 'an' = " + WordTree.contains("an"));      
+		System.out.println("WordTree contains 'DOWN' = " + WordTree.contains("DOWN"));
+		System.out.println("WordTree contains 'don't' = " + WordTree.contains("don't"));
 
 		/*  Test if getPrefix works, print input and output
 		 *    ex: "door", "any", "cat" should return "door", "an", and "" respectively
 		 *    
 		 */    
-		
+
 		System.out.println("");
 		System.out.println("-----  Test getPrefix()");		
 		System.out.println("longest prefix of door = " + WordTree.getPrefix("door"));
 		System.out.println("longest prefix of any = " + WordTree.getPrefix("any"));
 		System.out.println("longest prefix of cat = " + WordTree.getPrefix("cat"));
+		System.out.println();
 
 		/* Test getListPrefixMatches, print input and output
 		 * Try prefixes "a", "do", "c" (should return [a, and, ax], [dog, door, dot], [ ] respectively)
-	     */
-		
+		 */
+
 		System.out.println("");
 		System.out.println("-----  Test getListPrefixMatches()  i.e. autocomplete ");		
 		System.out.println("a = " + WordTree.getListPrefixMatches("a"));
