@@ -53,12 +53,12 @@ public class TesterA3starter
 		 *	  You will need to put a different pathname in here.
 		 */ 
 		
-//		String fileName = "C:\\\\Users\\\\zizou\\\\eclipse-workspace\\\\COMP250\\\\src\\\\Assignment3\\\\bodybuilding.txt";
-//		list = readWordsFromFile(fileName);
+		String fileName = "C:\\\\Users\\\\zizou\\\\eclipse-workspace\\\\COMP250\\\\src\\\\Assignment3\\\\bodybuilding.txt";
+		list = readWordsFromFile(fileName);
 
-		//    For debugging, we suggest you use a smaller set of words such as the ones shown in the PDF.      
+		// For debugging, we suggest you use a smaller set of words such as the ones shown in the PDF.      
 
-		Collections.addAll(list, "a", "and", "ax", "dog", "door", "dot", "don't", "cat");
+//		Collections.addAll(list, "a", "and", "ax", "dog", "door", "dot", "don't", "cat");
 
 		WordTree   WordTree = new WordTree();
 		WordTree.loadWords(list);
@@ -81,6 +81,7 @@ public class TesterA3starter
 		System.out.println("WordTree contains 'an' = " + WordTree.contains("an"));      
 		System.out.println("WordTree contains 'DOWN' = " + WordTree.contains("DOWN"));
 		System.out.println("WordTree contains 'don't' = " + WordTree.contains("don't"));
+		System.out.println("WordTree contains 'actually' = " + WordTree.contains("actually"));
 
 		/*  Test if getPrefix works, print input and output
 		 *    ex: "door", "any", "cat" should return "door", "an", and "" respectively
@@ -92,6 +93,7 @@ public class TesterA3starter
 		System.out.println("longest prefix of door = " + WordTree.getPrefix("door"));
 		System.out.println("longest prefix of any = " + WordTree.getPrefix("any"));
 		System.out.println("longest prefix of cat = " + WordTree.getPrefix("cat"));
+		System.out.println("longest prefix of active = " + WordTree.getPrefix("active"));
 		System.out.println();
 
 		/* Test getListPrefixMatches, print input and output
@@ -103,6 +105,7 @@ public class TesterA3starter
 		System.out.println("a = " + WordTree.getListPrefixMatches("a"));
 		System.out.println("do = " + WordTree.getListPrefixMatches("do"));
 		System.out.println("c = " + WordTree.getListPrefixMatches("c"));
+		System.out.println("ac = " + WordTree.getListPrefixMatches("ac"));
 
 	}
 }
