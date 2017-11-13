@@ -2,6 +2,7 @@ package Assignment3;
 
 //COMP 250 - Introduction to Computer Science - Fall 2017
 //Assignment #3
+//Alexander Harris - 260688155
 
 import java.util.*;
 
