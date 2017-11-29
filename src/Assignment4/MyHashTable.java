@@ -42,7 +42,12 @@ class MyHashTable<K,V> {
 
 		this.numBuckets = numBuckets;
 		this.buckets = new ArrayList<HashLinkedList<K,V>>(numBuckets);
-		this.entryCount = 0;
+		
+		// Iterate through and create an empty HashLinkedList for each bucket.
+		for(int i = 0; i < numBuckets; i++) {
+			HashLinkedList<K,V> emptyList = new HashLinkedList<K,V>();
+			this.buckets.add(emptyList);
+		}
 		
 		//  ADD YOUR CODE ABOVE HERE
 
@@ -90,21 +95,13 @@ class MyHashTable<K,V> {
 
 		//  ADD YOUR CODE BELOW HERE
 		
-		int bucket = this.hashFunction(key);
 		V old = this.get(key);
 		
-		if(old == null) {
-			this.buckets.set(bucket, new HashLinkedList<K,V>());
-			this.buckets.get(bucket).add(key, value);
-			this.entryCount++;
-		}
-		else {
-			this.buckets.get(bucket).add(key, value);
-			this.entryCount++;
-		}
+		this.buckets.get(hashFunction(key)).add(key, value);
+		this.entryCount++;
 		
-		if((this.size() / this.getNumBuckets()) > MAX_LOAD_FACTOR) {
-			this.rehash();
+		if(this.size() / this.getNumBuckets() > this.MAX_LOAD_FACTOR) {
+			rehash();
 		}
 
 		//  ADD YOUR CODE ABOVE HERE
@@ -119,10 +116,12 @@ class MyHashTable<K,V> {
 
 		//  ADD YOUR CODE BELOW HERE
 		
-		
+		if(this.buckets.get(hashFunction(key)).getListNode(key) != null) {
+			return this.buckets.get(hashFunction(key)).getListNode(key).getValue();
+		}
 		
 		//  ADD YOUR CODE ABOVE HERE
-
+		
 		return null;
 	}
 
@@ -133,13 +132,17 @@ class MyHashTable<K,V> {
 	public V remove(K key) {
 
 		//  ADD YOUR CODE BELOW HERE
-
+		
+		if(this.buckets.get(hashFunction(key)).getListNode(key) != null) {
+			this.entryCount--;
+			return this.buckets.get(hashFunction(key)).remove(key).getValue();
+		}
 
 		//  ADD  YOUR CODE ABOVE HERE
 
 		return null;
 	}
-
+	
 	/*
 	 *  This method is used for testing rehash().  Normally one would not provide such a method. 
 	 */
@@ -176,6 +179,35 @@ class MyHashTable<K,V> {
 	public void rehash()
 	{
 		//   ADD YOUR CODE BELOW HERE
+		
+		this.numBuckets = this.numBuckets * 2;
+		HashLinkedList<K,V> pairs = new HashLinkedList<K,V>();
+		
+		//Copy over pairs into temp list
+		for(HashLinkedList<K,V> node : this.buckets) {
+			HashNode<K,V> removed = node.getHead();
+			for(int i = 0; i < node.size(); i++) {
+				if(removed != null) {
+					pairs.add(removed.getKey(), removed.getValue());
+				}
+				removed = removed.getNext();
+			}	
+		}
+		//Clear and enlarge hash table
+		this.buckets.clear();
+		while(this.buckets.size() < this.numBuckets) {
+			HashLinkedList<K,V> emptyList = new HashLinkedList<K,V>();
+			this.buckets.add(emptyList);
+		}
+		
+		//Add pairs back into enlarged hash table
+		HashNode<K,V> removed = pairs.getHead();
+		for(int i = 0; i < pairs.size(); i++) {
+			if(removed != null) {
+				this.buckets.get(hashFunction(removed.getKey())).add(removed.getKey(), removed.getValue());
+			}
+			removed = removed.getNext();
+		}
 
 		//   ADD YOUR CODE ABOVE HERE
 
@@ -206,13 +238,20 @@ class MyHashTable<K,V> {
 		ArrayList<K> listKeys = new ArrayList<K>();
 
 		//   ADD YOUR CODE BELOW HERE
-
+		
+		for(HashLinkedList<K,V> node : this.buckets) {
+			
+			HashNode<K,V> current = node.getHead();
+			
+			for(int i = 0; i < node.size(); i++) {
+				listKeys.add(current.getKey());
+				current = current.getNext();
+			}
+		}
+		
+		return listKeys;
 
 		//   ADD YOUR CODE ABOVE HERE
-
-
-
-		return null;   //  CODE STUB.   REMOVE THIS LINE.
 	}
 
 	/*
@@ -223,12 +262,20 @@ class MyHashTable<K,V> {
 		ArrayList<V> listValues = new ArrayList<V>();
 
 		//   ADD YOUR CODE BELOW HERE
-
+		
+		for(HashLinkedList<K,V> node : this.buckets) {
+			
+			HashNode<K,V> current = node.getHead();
+			
+			for(int i = 0; i < node.size(); i++) {
+				listValues.add(current.getValue());
+				current = current.getNext();
+			}
+		}
+		
+		return listValues;
+		
 		//   ADD YOUR CODE ABOVE HERE
-
-
-
-		return null; //CODE STUB. REMOVE THIS LINE.
 	}
 
 	@Override
@@ -254,6 +301,7 @@ class MyHashTable<K,V> {
 	 *    Inner class:   Iterator for the Hash Table.
 	 */
 	public class HashIterator implements Iterator<HashNode<K,V> > {
+		
 		HashLinkedList<K,V> allEntries;
 
 		/**
@@ -263,7 +311,20 @@ class MyHashTable<K,V> {
 		{
 
 			//  ADD YOUR CODE BELOW HERE
-
+			
+			allEntries = new HashLinkedList<K,V>();
+			for(HashLinkedList<K,V> node : buckets) {
+				
+				HashNode<K,V> current = node.getHead();
+				
+				for(int i = 0; i < node.size(); i++) {
+					if(current != null) {
+						allEntries.add(current.getKey(), current.getValue());
+						current = current.getNext();
+					}
+					
+				}
+			}
 
 			//  ADD YOUR CODE ABOVE HERE
 

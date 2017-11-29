@@ -50,16 +50,15 @@ public class HashLinkedList<K,V>{
 			return null;
 		}
 		
-		HashNode<K,V> previous = this.head;
-		HashNode<K,V> current = previous.getNext();
+		HashNode<K,V> current = this.head;
 		
 		while(current != null) {
 			if(current.getKey() == key) {
 				return current;
 			}
-			previous = current;
 			current = current.getNext();
 		}
+		
 		return null;
 		
 		// ADD CODE ABOVE HERE
@@ -102,19 +101,25 @@ public class HashLinkedList<K,V>{
 		HashNode<K,V> previous = this.head;
 		HashNode<K,V> current = previous.getNext();
 		
+		if(previous.getKey() == key) {
+			this.size--;
+			this.head = current;
+			return previous;
+		}
+		
 		while(current != null) {
 			if(current.getKey() == key) {
 				this.size--;
-				previous = current.getNext();
-				
+				this.head = current.getNext();
 				return current;
 			}
 			previous = current;
 			current = current.getNext();
 		}
 		
+		return null;
+		
 		// ADD CODE ABOVE HERE
-		return null; // removing failed
 	}
 
 
@@ -139,8 +144,12 @@ public class HashLinkedList<K,V>{
 	}
 
 	//ADD YOUR HELPER  METHODS BELOW THIS
-
-
+		
+	//Method for getting the head
+	public HashNode<K,V> getHead() {
+		return head;
+	}
+	
 	//ADD YOUR HELPER METHODS ABOVE THIS
 
 
