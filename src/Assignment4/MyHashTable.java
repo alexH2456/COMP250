@@ -28,7 +28,7 @@ class MyHashTable<K,V> {
 	 *  We use an Arraylist rather than an array, since the former is simpler to use in Java.   
 	 */
 
-	ArrayList< HashLinkedList<K,V> >  buckets;
+	ArrayList<HashLinkedList<K,V>> buckets;
 
 	/* 
 	 * Constructor.
@@ -40,7 +40,10 @@ class MyHashTable<K,V> {
 
 		//  ADD YOUR CODE BELOW HERE
 
-
+		this.numBuckets = numBuckets;
+		this.buckets = new ArrayList<HashLinkedList<K,V>>(numBuckets);
+		this.entryCount = 0;
+		
 		//  ADD YOUR CODE ABOVE HERE
 
 	}
@@ -50,7 +53,7 @@ class MyHashTable<K,V> {
 	 */
 	private int hashFunction(K key) {
 
-		return  Math.abs( key.hashCode() ) % numBuckets ;
+		return  Math.abs(key.hashCode()) % numBuckets ;
 	}
 
 	/**
@@ -62,7 +65,7 @@ class MyHashTable<K,V> {
 		if (entryCount == 0)
 			return true;
 		else
-			return(false);
+			return false;
 	}
 
 	/**
@@ -71,7 +74,7 @@ class MyHashTable<K,V> {
 
 	public int size()
 	{
-		return(entryCount);
+		return entryCount;
 	}
 
 	/**
@@ -83,12 +86,29 @@ class MyHashTable<K,V> {
 	 *  Otherwise return null.   
 	 */
 
-	public  V  put(K key, V value) {
+	public V put(K key, V value) {
 
 		//  ADD YOUR CODE BELOW HERE
+		
+		int bucket = this.hashFunction(key);
+		V old = this.get(key);
+		
+		if(old == null) {
+			this.buckets.set(bucket, new HashLinkedList<K,V>());
+			this.buckets.get(bucket).add(key, value);
+			this.entryCount++;
+		}
+		else {
+			this.buckets.get(bucket).add(key, value);
+			this.entryCount++;
+		}
+		
+		if((this.size() / this.getNumBuckets()) > MAX_LOAD_FACTOR) {
+			this.rehash();
+		}
 
 		//  ADD YOUR CODE ABOVE HERE
-		return null;
+		return old;
 	}
 
 	/**
@@ -98,8 +118,9 @@ class MyHashTable<K,V> {
 	public V get(K key) {
 
 		//  ADD YOUR CODE BELOW HERE
-
-
+		
+		
+		
 		//  ADD YOUR CODE ABOVE HERE
 
 		return null;
@@ -116,7 +137,7 @@ class MyHashTable<K,V> {
 
 		//  ADD  YOUR CODE ABOVE HERE
 
-		return(null);
+		return null;
 	}
 
 	/*
@@ -131,7 +152,7 @@ class MyHashTable<K,V> {
 	 * Returns an iterator for the hash table. 
 	 */
 
-	public MyHashTable<K, V>.HashIterator  iterator(){
+	public MyHashTable<K, V>.HashIterator iterator(){
 		return new HashIterator();
 	}
 
@@ -179,10 +200,10 @@ class MyHashTable<K,V> {
 	 * return an ArrayList of the keys in the hashtable
 	 */
 
-	public ArrayList<K>  keys()
+	public ArrayList<K> keys()
 	{
 
-		ArrayList<K>  listKeys = new ArrayList<K>();
+		ArrayList<K> listKeys = new ArrayList<K>();
 
 		//   ADD YOUR CODE BELOW HERE
 
@@ -199,7 +220,7 @@ class MyHashTable<K,V> {
 	 */
 	public ArrayList <V> values()
 	{
-		ArrayList<V>  listValues = new ArrayList<V>();
+		ArrayList<V> listValues = new ArrayList<V>();
 
 		//   ADD YOUR CODE BELOW HERE
 
@@ -232,13 +253,13 @@ class MyHashTable<K,V> {
 	/*
 	 *    Inner class:   Iterator for the Hash Table.
 	 */
-	public class HashIterator implements  Iterator<HashNode<K,V> > {
-		HashLinkedList<K,V>  allEntries;
+	public class HashIterator implements Iterator<HashNode<K,V> > {
+		HashLinkedList<K,V> allEntries;
 
 		/**
 		 * Constructor:   make a linkedlist (HashLinkedList) 'allEntries' of all the entries in the hash table
 		 */
-		public  HashIterator()
+		public HashIterator()
 		{
 
 			//  ADD YOUR CODE BELOW HERE
