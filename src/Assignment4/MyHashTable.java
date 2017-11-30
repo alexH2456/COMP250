@@ -95,29 +95,30 @@ class MyHashTable<K,V> {
 
 		//  ADD YOUR CODE BELOW HERE
 		
-		V old = this.get(key);
+		V old = get(key);
 		
-		this.buckets.get(hashFunction(key)).add(key, value);
-		this.entryCount++;
+		buckets.get(hashFunction(key)).add(key, value);
+		entryCount++;
 		
-		if(this.size() / this.getNumBuckets() > this.MAX_LOAD_FACTOR) {
+		if((double)size() / (double)getNumBuckets() > MAX_LOAD_FACTOR) {
 			rehash();
 		}
 
 		//  ADD YOUR CODE ABOVE HERE
+		
 		return old;
 	}
 
 	/**
 	 * Retrieves a value associated with some given key in the hash table.
-     Returns null if the key could not be found in the hash table)
+     * Returns null if the key could not be found in the hash table)
 	 */
 	public V get(K key) {
 
 		//  ADD YOUR CODE BELOW HERE
 		
-		if(this.buckets.get(hashFunction(key)).getListNode(key) != null) {
-			return this.buckets.get(hashFunction(key)).getListNode(key).getValue();
+		if(buckets.get(hashFunction(key)).getListNode(key) != null) {
+			return buckets.get(hashFunction(key)).getListNode(key).getValue();
 		}
 		
 		//  ADD YOUR CODE ABOVE HERE
@@ -133,13 +134,13 @@ class MyHashTable<K,V> {
 
 		//  ADD YOUR CODE BELOW HERE
 		
-		if(this.buckets.get(hashFunction(key)).getListNode(key) != null) {
-			this.entryCount--;
-			return this.buckets.get(hashFunction(key)).remove(key).getValue();
+		if(buckets.get(hashFunction(key)).getListNode(key) != null) {
+			entryCount--;
+			return buckets.get(hashFunction(key)).remove(key).getValue();
 		}
 
 		//  ADD  YOUR CODE ABOVE HERE
-
+		
 		return null;
 	}
 	
@@ -180,11 +181,11 @@ class MyHashTable<K,V> {
 	{
 		//   ADD YOUR CODE BELOW HERE
 		
-		this.numBuckets = this.numBuckets * 2;
+		numBuckets = numBuckets * 2;
 		HashLinkedList<K,V> pairs = new HashLinkedList<K,V>();
 		
 		//Copy over pairs into temp list
-		for(HashLinkedList<K,V> node : this.buckets) {
+		for(HashLinkedList<K,V> node : buckets) {
 			HashNode<K,V> removed = node.getHead();
 			for(int i = 0; i < node.size(); i++) {
 				if(removed != null) {
@@ -194,17 +195,17 @@ class MyHashTable<K,V> {
 			}	
 		}
 		//Clear and enlarge hash table
-		this.buckets.clear();
-		while(this.buckets.size() < this.numBuckets) {
+		buckets.clear();
+		while(buckets.size() < numBuckets) {
 			HashLinkedList<K,V> emptyList = new HashLinkedList<K,V>();
-			this.buckets.add(emptyList);
+			buckets.add(emptyList);
 		}
 		
 		//Add pairs back into enlarged hash table
 		HashNode<K,V> removed = pairs.getHead();
 		for(int i = 0; i < pairs.size(); i++) {
 			if(removed != null) {
-				this.buckets.get(hashFunction(removed.getKey())).add(removed.getKey(), removed.getValue());
+				buckets.get(hashFunction(removed.getKey())).add(removed.getKey(), removed.getValue());
 			}
 			removed = removed.getNext();
 		}
@@ -239,7 +240,7 @@ class MyHashTable<K,V> {
 
 		//   ADD YOUR CODE BELOW HERE
 		
-		for(HashLinkedList<K,V> node : this.buckets) {
+		for(HashLinkedList<K,V> node : buckets) {
 			
 			HashNode<K,V> current = node.getHead();
 			
@@ -263,7 +264,7 @@ class MyHashTable<K,V> {
 
 		//   ADD YOUR CODE BELOW HERE
 		
-		for(HashLinkedList<K,V> node : this.buckets) {
+		for(HashLinkedList<K,V> node : buckets) {
 			
 			HashNode<K,V> current = node.getHead();
 			

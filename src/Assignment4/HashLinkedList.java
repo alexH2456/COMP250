@@ -25,16 +25,18 @@ public class HashLinkedList<K,V>{
 
 	public void add(K key, V value){
 		// ADD CODE BELOW HERE
-		HashNode<K,V> newNode = new HashNode<K,V>(key, value);
-		this.size++;
 		
-		if(this.head == null) {
-			this.head = newNode;
+		HashNode<K,V> newNode = new HashNode<K,V>(key, value);
+		size++;
+
+		if(head == null) {
+			head = newNode;
 		}
 		else {
-			newNode.next = this.head;
-			this.head = newNode;
+			newNode.next = head;
+			head = newNode;
 		}
+		
 		// ADD CODE ABOVE HERE
 	}
 
@@ -45,22 +47,22 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> getListNode(K key){
 		// ADD CODE BELOW HERE
-		
-		if(this.isEmpty()) {
+
+		if(isEmpty()) {
 			return null;
 		}
-		
-		HashNode<K,V> current = this.head;
-		
+
+		HashNode<K,V> current = head;
+
 		while(current != null) {
 			if(current.getKey() == key) {
 				return current;
 			}
 			current = current.getNext();
 		}
-		
+
 		return null;
-		
+
 		// ADD CODE ABOVE HERE
 	}
 
@@ -72,19 +74,19 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> removeFirst(){
 		// ADD CODE BELOW HERE
-		
-		if(this.isEmpty()) {
+
+		if(isEmpty()) {
 			return null;
 		}
-		else {
-			HashNode<K,V> removed = this.head;
-			HashNode<K,V> newHead = removed.getNext();
-			
-			this.size--;
-			this.head = newHead;
-			
-			return removed;
-		}
+		
+		HashNode<K,V> removed = head;
+
+		size--;
+		head = head.next;
+
+		return removed;
+		
+		// ADD CODE ABOVE HERE
 	}
 
 	/*
@@ -93,32 +95,36 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> remove(K key){
 		// ADD CODE BELOW HERE
-		
-		if(this.isEmpty()) {
+
+		HashNode<K,V> previous = null;
+		HashNode<K,V> current = head;
+		HashNode<K,V> deleted = null;
+
+		if(isEmpty()) {
 			return null;
-		}
-		
-		HashNode<K,V> previous = this.head;
-		HashNode<K,V> current = previous.getNext();
-		
-		if(previous.getKey() == key) {
-			this.size--;
-			this.head = current;
-			return previous;
 		}
 		
 		while(current != null) {
 			if(current.getKey() == key) {
-				this.size--;
-				this.head = current.getNext();
-				return current;
+				
+				deleted = current;
+				
+				if(current == head) {
+					head = head.next;
+				}
+				else {
+					previous.next = current.next;
+				}
+				size--;
 			}
-			previous = current;
-			current = current.getNext();
+			else {
+				previous = current;
+			}
+			current = current.next;
 		}
 		
-		return null;
-		
+		return deleted;
+
 		// ADD CODE ABOVE HERE
 	}
 
@@ -144,12 +150,12 @@ public class HashLinkedList<K,V>{
 	}
 
 	//ADD YOUR HELPER  METHODS BELOW THIS
-		
+
 	//Method for getting the head
 	public HashNode<K,V> getHead() {
 		return head;
 	}
-	
+
 	//ADD YOUR HELPER METHODS ABOVE THIS
 
 
