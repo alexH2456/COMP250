@@ -100,6 +100,7 @@ class MyHashTable<K,V> {
 		buckets.get(hashFunction(key)).add(key, value);
 		entryCount++;
 		
+		//Rehash if current load factor larger than max
 		if((double)size() / (double)getNumBuckets() > MAX_LOAD_FACTOR) {
 			rehash();
 		}
@@ -184,7 +185,7 @@ class MyHashTable<K,V> {
 		numBuckets = numBuckets * 2;
 		HashLinkedList<K,V> pairs = new HashLinkedList<K,V>();
 		
-		//Copy over pairs into temp list
+		//Copy over pairs into temporary list
 		for(HashLinkedList<K,V> node : buckets) {
 			HashNode<K,V> removed = node.getHead();
 			for(int i = 0; i < node.size(); i++) {
@@ -194,6 +195,7 @@ class MyHashTable<K,V> {
 				removed = removed.getNext();
 			}	
 		}
+		
 		//Clear and enlarge hash table
 		buckets.clear();
 		while(buckets.size() < numBuckets) {
@@ -240,6 +242,7 @@ class MyHashTable<K,V> {
 
 		//   ADD YOUR CODE BELOW HERE
 		
+		//Traverse through table and add keys to list.
 		for(HashLinkedList<K,V> node : buckets) {
 			
 			HashNode<K,V> current = node.getHead();
@@ -264,6 +267,7 @@ class MyHashTable<K,V> {
 
 		//   ADD YOUR CODE BELOW HERE
 		
+		//Traverse through table and add values to list.
 		for(HashLinkedList<K,V> node : buckets) {
 			
 			HashNode<K,V> current = node.getHead();
@@ -313,6 +317,7 @@ class MyHashTable<K,V> {
 
 			//  ADD YOUR CODE BELOW HERE
 			
+			//Traverse through table and add entries to list.
 			allEntries = new HashLinkedList<K,V>();
 			for(HashLinkedList<K,V> node : buckets) {
 				

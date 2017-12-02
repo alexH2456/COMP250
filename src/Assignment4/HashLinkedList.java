@@ -26,6 +26,7 @@ public class HashLinkedList<K,V>{
 	public void add(K key, V value){
 		// ADD CODE BELOW HERE
 		
+		// Make newNode head. Move current head to next node.
 		HashNode<K,V> newNode = new HashNode<K,V>(key, value);
 		size++;
 
@@ -47,7 +48,8 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> getListNode(K key){
 		// ADD CODE BELOW HERE
-
+		
+		// Go through list and return if key matches, else return null.
 		if(isEmpty()) {
 			return null;
 		}
@@ -74,7 +76,8 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> removeFirst(){
 		// ADD CODE BELOW HERE
-
+		
+		// Remove current head, set head to next node.
 		if(isEmpty()) {
 			return null;
 		}
@@ -95,7 +98,9 @@ public class HashLinkedList<K,V>{
 
 	public HashNode<K,V> remove(K key){
 		// ADD CODE BELOW HERE
-
+		
+		// Look for key in the list, if key is the head, set head to next node. 
+		// Otherwise remove node by setting previous node to next node.
 		HashNode<K,V> previous = null;
 		HashNode<K,V> current = head;
 		HashNode<K,V> deleted = null;
