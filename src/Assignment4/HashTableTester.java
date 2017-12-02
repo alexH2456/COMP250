@@ -1,9 +1,6 @@
 package Assignment4;
 
 import java.util.ArrayList;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.IOException;
 /**
  * Class for testing your implementation of the HashTable class.
  */

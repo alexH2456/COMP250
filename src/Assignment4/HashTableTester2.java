@@ -28,7 +28,7 @@ public class HashTableTester2 {
 		return songs;
 	}
 
-	@SuppressWarnings("empty-statement")
+	@SuppressWarnings({ "unchecked" })
 	public static void main(String[] args) {
 		ArrayList<Song> songs = initSongList();
 
@@ -97,6 +97,7 @@ public class HashTableTester2 {
 			errors.append("Failed to retrieve song 'Scream'.\n");
 		}
 
+		@SuppressWarnings("rawtypes")
 		Iterator iterator = songTable.iterator();
 		while(iterator.hasNext())
 		{
